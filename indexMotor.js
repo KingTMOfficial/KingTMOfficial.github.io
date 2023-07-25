@@ -13,7 +13,7 @@ var xStart=0,yStart=0,selWin=0;
 var prevX=0,prevY=0;
 var clicked=false,resize=false,setFullscreen=0,attr,select=false,preventEvents=false,expanded=false,slide=false;
 var lockTaskbar=true,lockTaskbah=false,hide=true,preventHide=false;
-var windows=[],origNames=[],winCount=0,hiddenApps=5,permaStickied=3;  //permaStickied denotes the taskbar icons that cannot be unpinned, and so don't get included in the editable taskArr array.
+var windows=[],origNames=[],winCount=0,hiddenApps=5,permaStickied=2;  //permaStickied denotes the taskbar icons that cannot be unpinned, and so don't get included in the editable taskArr array.
 var last=0;
 var contextAssort=[
   [0,1,2,3],
@@ -44,7 +44,7 @@ var backgrounds=["Abstract.jpg","Bouncy.jpg","Gimignano.jpg","Flower.jpg","Bucks
 contextShow=false,next=null;
 
 //load variables from localStorage
-var taskArr=[0,2],oftenUsed=[];
+var taskArr=[0,2,18],oftenUsed=[];
 var tzIndex=localStorage.getItem("tzIndex") || 0,tzOffset=localStorage.getItem("tzOffset") || 0;
 var tmpArr=localStorage.getItem("taskArr");
 taskArr=tmpArr!=null?tmpArr.split(","):taskArr;
@@ -62,32 +62,31 @@ document.getElementById("taskbar").className=lockTaskbar?"locked":"unlocked";
 document.body.classList.add(localStorage.getItem("viewmode") || "grid");
 
 var programData=[
-  {name: "Home", url: "https://picturelements.github.io/index", icon: {url:"home"}, keywords: "home,homepage,index,information"},
-  {name: "Sudoku Solver", url: "https://picturelements.github.io/sudokuSolver", icon: {url:"sudokusolver"}, keywords: "sudoku,solver,games,interactive"},
-  {name: "Mandelbrot", url: "https://picturelements.github.io/mandelbrot", icon: {url:"mandelbrot"}, keywords: "mandelbrot,julia,set,generator,fractal,interactive,math,canvas"},
+  {name: "Home", url: "https://kingtmofficial.github.io/index", icon: {url:"home"}, keywords: "home,homepage,index,information"},
+  {name: "Sudoku Solver", url: "https://kingtmofficial.github.io/sudokuSolver", icon: {url:"sudokusolver"}, keywords: "sudoku,solver,games,interactive"},
+  {name: "Mandelbrot", url: "https://kingtmofficial.github.io/mandelbrot", icon: {url:"mandelbrot"}, keywords: "mandelbrot,julia,set,generator,fractal,interactive,math,canvas"},
   {name: "Pitchfork Emporium", url: "https://pitchforkemporium.github.io/", icon: {url:"pitchforkemporium"}, keywords: "pitchfork,emporium,store,webshop,reddit,api"},
   {name: "Boids", url: "https://aquaplexus.net/fishSim", icon: {url:"boids"}, keywords: "boids,craig,reynolds,interactive,fish,simulation"},
-  {name: "HTML Editor", url: "https://picturelements.github.io/editor", icon: {url:"htmleditor"}, keywords: "html,editor,css,interactive,gadget"},
-  {name: "Bézier", url: "https://picturelements.github.io/bezier", icon: {url:"bezier"}, keywords: "bezier,bézier,interactive,gadget"},
-  {name: "Is it Prime?", url: "https://picturelements.github.io/isitprime", icon: {url:"isitprime"}, keywords: "prime,generator,math,information"},
-  {name: "N:th Prime", url: "https://picturelements.github.io/nthPrime", icon: {url:"nthprime"}, keywords: "nth,prime,generator,math,information"},
-  {name: "reddit Live 2.0", url: "https://picturelements.github.io/redditLive", icon: {url:"redditlive"}, keywords: "reddit,live,api,information"},
-  //{name: "Egg Hunt", url: "https://picturelements.github.io/egghunt", icon: {url:"egghunt"}, keywords: "egg,hunt,confused,travolta,game,reddit,easter"},
+  {name: "HTML Editor", url: "https://kingtmofficial.github.io/editor", icon: {url:"htmleditor"}, keywords: "html,editor,css,interactive,gadget"},
+  {name: "Bézier", url: "https://kingtmofficial.github.io/bezier", icon: {url:"bezier"}, keywords: "bezier,bézier,interactive,gadget"},
+  {name: "Is it Prime?", url: "https://kingtmofficial.github.io/isitprime", icon: {url:"isitprime"}, keywords: "prime,generator,math,information"},
+  {name: "N:th Prime", url: "https://kingtmofficial.github.io/nthPrime", icon: {url:"nthprime"}, keywords: "nth,prime,generator,math,information"},
+  {name: "reddit Live 2.0", url: "https://kingtmofficial.github.io/redditLive", icon: {url:"redditlive"}, keywords: "reddit,live,api,information"},
+  //{name: "Egg Hunt", url: "https://kingtmofficial.github.io/egghunt", icon: {url:"egghunt"}, keywords: "egg,hunt,confused,travolta,game,reddit,easter"},
   {name: "Game of Life", url: "https://aquaplexus.net/gameoflife", icon: {url:"gameoflife"}, keywords: "game,life,interactive,simulation,conway"},
-  {name: "Hit Lawyer", url: "https://picturelements.github.io/hitLawyer", icon: {url:"hitlawyer"}, keywords: "hit,lawyer,gadget"},
+  {name: "Hit Lawyer", url: "https://kingtmofficial.github.io/hitLawyer", icon: {url:"hitlawyer"}, keywords: "hit,lawyer,gadget"},
   {name: "Fractal", url: "https://aquaplexus.net/fractal", icon: {url:"fractal"}, keywords: "fractal,generator,interactive,math"},
-  {name: "Multiples", url: "https://picturelements.github.io/multiples", icon: {url:"multiples"}, keywords: "multiples,math,interactive"},
+  {name: "Multiples", url: "https://kingtmofficial.github.io/multiples", icon: {url:"multiples"}, keywords: "multiples,math,interactive"},
   {name: "Fireworks", url: "https://aquaplexus.net/firework", icon: {url:"fireworks"}, keywords: "fireworks,interactive,gadget,canvas"},
-  {name: "Phone Snake", url: "https://picturelements.github.io/phonesnake", icon: {url:"phonesnake"}, keywords: "phone,snake,game,interactive"},
-  //{name: "Back Dropper", url: "https://picturelements.github.io/backdropper", icon: {url:"backdropper"}, keywords: "back,dropper,library,background,canvas"},
-  {name: "Parrots", url: "https://picturelements.github.io/parrots", icon: {url:"parrots"}, keywords: "parrots,dank,reddit,party,epilepsy"},
-  //{name: "Smoke", url: "https://picturelements.github.io/smoke", icon: {url:"smoke"}, keywords: "smoke,3d,canvas,math"},
-  {name: "404.html", url: "https://picturelements.github.io/404", icon: {url:"404"}, keywords: "404,terminal,console,greentext"},
-  {name: "Matrix", url: "https://picturelements.github.io/matrix", icon: {url:"matrix"}, keywords: "matrix,math,multiplication"},
-  {name: "Sweeper", url:"https://picturelements.github.io/games/minesweeper/", icon: {url:"minesweeper"}, keywords: "mine,sweeper,game,interactive"},
-  {name: "Dodge", url: "https://picturelements.github.io/games/dodge", icon: {url:"dodge"}, keywords: "game,reddit,cursor,slide"},
-  {name: "Emojifuck", url: "https://picturelements.github.io/emojifuck", icon: {url:"emojifuck"}, keywords: "emoji,brainfuck,esolang,interpreter"},
-  {name: "about.txt", url: "https://picturelements.github.io/PeNote2?url=https://picturelements.github.io/textfiles/about.txt", icon: {file:"txt"}, keywords: "about,meta,info,text,document,txt,PeOS"},
+  {name: "Phone Snake", url: "https://kingtmofficial.github.io/phonesnake", icon: {url:"phonesnake"}, keywords: "phone,snake,game,interactive"},
+  //{name: "Back Dropper", url: "https://kingtmofficial.github.io/backdropper", icon: {url:"backdropper"}, keywords: "back,dropper,library,background,canvas"},
+  {name: "Parrots", url: "https://kingtmofficial.github.io/parrots", icon: {url:"parrots"}, keywords: "parrots,dank,reddit,party,epilepsy"},
+  //{name: "Smoke", url: "https://kingtmofficial.github.io/smoke", icon: {url:"smoke"}, keywords: "smoke,3d,canvas,math"},
+  {name: "404.html", url: "https://kingtmofficial.github.io/404", icon: {url:"404"}, keywords: "404,terminal,console,greentext"},
+  {name: "Matrix", url: "https://kingtmofficial.github.io/matrix", icon: {url:"matrix"}, keywords: "matrix,math,multiplication"},
+  {name: "Sweeper", url:"https://kingtmofficial.github.io/games/minesweeper/", icon: {url:"minesweeper"}, keywords: "mine,sweeper,game,interactive"},
+  {name: "Dodge", url: "https://kingtmofficial.github.io/games/dodge", icon: {url:"dodge"}, keywords: "game,reddit,cursor,slide"},
+  {name: "about.txt", url: "https://kingtmofficial.github.io/PeNote2?url=https://kingtmofficial.github.io/textfiles/about.txt", icon: {file:"txt"}, keywords: "about,meta,info,text,document,txt,Windows 10"},
   {name: "Viewer", url: "", icon: {url:"viewer"}, keywords: ""},
   {name: "Console", url: "", icon: {url:"console"}, keywords: ""},
   {name: "Prompt", url: "", icon: {svg:"info_icon"}, keywords: ""},
@@ -95,7 +94,7 @@ var programData=[
   {name: "File Explorer", url: "", icon: {url:"explorer"}, keywords: ""}
 ];
 pl=programData.length;
-var viewerID=pl-5,consoleID=pl-4,errID=pl-3,setID=pl-2,explorerID=pl-1,emojifuckID=pl-7;
+var viewerID=pl-5,consoleID=pl-4,errID=pl-3,setID=pl-2,explorerID=pl-1;
 var defaultPage="https://api.github.com/repos/PicturElements/picturelements.github.io/contents";
 
 document.body.addEventListener("mousedown",function(event){winSelect=true; xStart=event.clientX; yStart=event.clientY; hideSearch();});
@@ -173,7 +172,6 @@ function setup(){
   }
   addTaskbarIcon(explorerID,"null",0,programData[explorerID].name,programData[explorerID].icon,true);
   addTaskbarIcon(consoleID,"null",0,programData[consoleID].name,programData[consoleID].icon,true);
-  addTaskbarIcon(emojifuckID,"null",0,programData[emojifuckID].name,programData[emojifuckID].icon,true);
   for (var i=0;i<taskArr.length;i++){
     addTaskbarIcon(taskArr[i],"null",0,programData[taskArr[i]].name,programData[taskArr[i]].icon,true);
   }
@@ -228,7 +226,7 @@ function genCog(r){
 }
 
 function setCols(){
-  document.getElementById("specCols").innerHTML=".specColor{background-color:"+colors[colId][0]+"; border-color:"+colors[colId][0]+";}\n.window[active='true'] .infoCol, .normCol{background-color:"+colors[colId][1]+";}\n.borderCol{border-color:"+colors[colId][2]+" !important;}\n.grad{background: -moz-linear-gradient(-45deg, "+colors[colId][3]+"); background: -webkit-linear-gradient(-45deg, "+colors[colId][3]+"); background: linear-gradient(135deg, "+colors[colId][3]+"); background: linear-gradient(135deg, "+colors[colId][3]+");}"+(backId!=0?".backOverride{background:none; background-image:url(https://picturelements.github.io/images/wallpapers/"+backgrounds[backId-1]+");}":"")+"";
+  document.getElementById("specCols").innerHTML=".specColor{background-color:"+colors[colId][0]+"; border-color:"+colors[colId][0]+";}\n.window[active='true'] .infoCol, .normCol{background-color:"+colors[colId][1]+";}\n.borderCol{border-color:"+colors[colId][2]+" !important;}\n.grad{background: -moz-linear-gradient(-45deg, "+colors[colId][3]+"); background: -webkit-linear-gradient(-45deg, "+colors[colId][3]+"); background: linear-gradient(135deg, "+colors[colId][3]+"); background: linear-gradient(135deg, "+colors[colId][3]+");}"+(backId!=0?".backOverride{background:none; background-image:url(https://kingtmofficial.github.io/images/wallpapers/"+backgrounds[backId-1]+");}":"")+"";
 }
 
 function addWindow(id,title,contStr,w,h,type){
@@ -1056,7 +1054,7 @@ function restart(){
 
 function powerOff(evt){
   preventHide=false;
-  openPopup("Nope.","You fool! You can't exit PeOS. PeOS is love. PeOS is life.");
+  openPopup("Nope.","You fool! You can't exit Windows 10. Windows 10 is love. Windows 10 is life.");
   hideSearch();
   evt.stopPropagation();
 }
@@ -1331,7 +1329,7 @@ function colorSelect(){
   
   inner="<div class='backoption grad' "+(backId==0?"selected":"")+" onclick=selIco(0)></div>";
   for (var i=1;i<backgrounds.length+1;i++){
-    inner+="<div class='backoption' "+(i==backId?"selected":"")+" onclick=selIco("+i+") style='background-image:url(https://picturelements.github.io/images/wallpapers/icons/"+(backgrounds[i-1].replace(".","Ico."))+")'></div>";
+    inner+="<div class='backoption' "+(i==backId?"selected":"")+" onclick=selIco("+i+") style='background-image:url(https://kingtmofficial.github.io/images/wallpapers/icons/"+(backgrounds[i-1].replace(".","Ico."))+")'></div>";
   }
   document.getElementById("backbar").innerHTML=inner;
 }
@@ -1637,7 +1635,7 @@ function loadFiles(url,elem,file){
       createLink(elem,"file tableheader hideable","return;","Name","File type","Size");
       for (var i in doc){
         if (doc[i].type=="dir"){
-          createLink(elem,"file dir","loadFilesRelay(this)",doc[i].name,"PeOS Folder","",doc[i].url);
+          createLink(elem,"file dir","loadFilesRelay(this)",doc[i].name,"Windows 10 Folder","",doc[i].url);
         }
       }
       for (var i in doc){
@@ -1648,11 +1646,11 @@ function loadFiles(url,elem,file){
           var attrUrl=null;
           if (type[0]=="doc"){
             func="relayAddWindow("+viewerID+",'"+doc[i].name+"',this)";
-            attrUrl="https://picturelements.github.io/PeNote2?url="+doc[i].download_url;
+            attrUrl="https://kingtmofficial.github.io/PeNote2?url="+doc[i].download_url;
             //console.log(func);
           }else{
             func="relayAddWindow("+viewerID+",'"+doc[i].name+"',this)";
-            attrUrl="https://picturelements.github.io/PeViewer?type="+type[0]+"&url="+doc[i].download_url;
+            attrUrl="https://kingtmofficial.github.io/PeViewer?type="+type[0]+"&url="+doc[i].download_url;
           }
           createLink(elem,"file "+type[0]+" "+ext,func,doc[i].name,type[1],getSize(doc[i].size),attrUrl);
         }
@@ -1885,7 +1883,7 @@ setInterval(randWifi,3000);
 
 function setIcon(obj,elem){
   if (obj.url!=undefined){
-    elem.style.backgroundImage="url(https://picturelements.github.io/images/win_icons/"+obj.url+".png)";
+    elem.style.backgroundImage="url(https://kingtmofficial.github.io/images/win_icons/"+obj.url+".png)";
   }else if (obj.svg!=undefined){
     var html=document.getElementById("svgbuffer").getElementsByClassName(obj.svg)[0].outerHTML;
     elem.innerHTML=html;
