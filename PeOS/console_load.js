@@ -35,7 +35,7 @@ function loadFont(){
     }
   };
   
-  xhttp.open("GET","https://raw.githubusercontent.com/PicturElements/picturelements.github.io/master/textfiles/figlet.txt",true);
+  xhttp.open("GET","https://raw.githubusercontent.com/kingtmofficial/kingtmofficial.github.io/master/textfiles/figlet.txt",true);
   xhttp.send();
 }
 
@@ -55,7 +55,7 @@ function loadCows(){
     }
   };
   
-  xhttp.open("GET","https://raw.githubusercontent.com/PicturElements/picturelements.github.io/master/textfiles/cows.txt",true);
+  xhttp.open("GET","https://raw.githubusercontent.com/kingtmofficial/kingtmofficial.github.io/master/textfiles/cows.txt",true);
   xhttp.send();
 }
 
@@ -67,7 +67,7 @@ function loadFortunes(){
     }
   };
   
-  xhttp.open("GET","https://raw.githubusercontent.com/PicturElements/picturelements.github.io/master/textfiles/fortunes.txt",true);
+  xhttp.open("GET","https://raw.githubusercontent.com/kingtmofficial/kingtmofficial.github.io/master/textfiles/fortunes.txt",true);
   xhttp.send();
 }
 
@@ -79,7 +79,7 @@ function loadLimericks(){
     }
   };
   
-  xhttp.open("GET","https://raw.githubusercontent.com/PicturElements/picturelements.github.io/master/textfiles/limericks.txt",true);
+  xhttp.open("GET","https://raw.githubusercontent.com/kingtmofficial/kingtmofficial.github.io/master/textfiles/limericks.txt",true);
   xhttp.send();
 }
 
