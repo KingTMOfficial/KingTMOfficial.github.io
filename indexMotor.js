@@ -95,7 +95,7 @@ var programData=[
 ];
 pl=programData.length;
 var viewerID=pl-5,consoleID=pl-4,errID=pl-3,setID=pl-2,explorerID=pl-1;
-var defaultPage="https://api.github.com/repos/PicturElements/picturelements.github.io/contents";
+var defaultPage="https://api.github.com/repos/kingtmofficial/kingtmofficial.github.io/contents";
 
 document.body.addEventListener("mousedown",function(event){winSelect=true; xStart=event.clientX; yStart=event.clientY; hideSearch();});
 document.body.addEventListener("mousemove",function(event){try{moveWindow(event);}catch(e){}});
